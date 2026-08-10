@@ -1,6 +1,9 @@
 /* =========================================
-   GENERAL
+   BLOOD DONOR MANAGEMENT SYSTEM
 ========================================= */
+
+
+/* ---------- Reset ---------- */
 
 * {
     margin: 0;
@@ -8,12 +11,18 @@
     box-sizing: border-box;
 }
 
+
+/* ---------- Body ---------- */
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background: #f5f7fa;
     color: #333;
     min-height: 100vh;
 }
+
+
+/* ---------- Container ---------- */
 
 .container {
     width: 90%;
@@ -41,7 +50,6 @@ body {
 
 .header p {
     font-size: 16px;
-    opacity: 0.9;
 }
 
 
@@ -68,8 +76,8 @@ main {
 
 .card h2 {
     color: #8f182d;
-    margin-bottom: 20px;
     font-size: 22px;
+    margin-bottom: 20px;
 }
 
 
@@ -96,19 +104,21 @@ main {
 
 .form-group input,
 .form-group select,
-.search-box input {
+.search-box input,
+.search-box select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 15px;
     outline: none;
-    transition: border-color 0.2s;
+    background: white;
 }
 
 .form-group input:focus,
 .form-group select:focus,
-.search-box input:focus {
+.search-box input:focus,
+.search-box select:focus {
     border-color: #9b1c31;
 }
 
@@ -118,9 +128,9 @@ main {
 ========================================= */
 
 .button-group {
-    margin-top: 25px;
     display: flex;
     gap: 12px;
+    margin-top: 25px;
 }
 
 .btn {
@@ -130,11 +140,10 @@ main {
     font-size: 15px;
     cursor: pointer;
     font-weight: bold;
-    transition: 0.2s;
 }
 
 .btn:hover {
-    transform: translateY(-1px);
+    opacity: 0.9;
 }
 
 .btn-primary {
@@ -142,26 +151,14 @@ main {
     color: white;
 }
 
-.btn-primary:hover {
-    background: #7d1426;
-}
-
 .btn-secondary {
     background: #e5e7eb;
     color: #333;
 }
 
-.btn-secondary:hover {
-    background: #d1d5db;
-}
-
 .btn-search {
     background: #34495e;
     color: white;
-}
-
-.btn-search:hover {
-    background: #263747;
 }
 
 .btn-edit {
@@ -185,12 +182,13 @@ main {
 
 .search-box {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr 180px auto auto;
     gap: 10px;
 }
 
 #searchMessage {
     margin-top: 12px;
+    min-height: 20px;
     font-weight: bold;
 }
 
@@ -201,8 +199,8 @@ main {
 
 .section-heading {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
 }
 
@@ -235,8 +233,8 @@ main {
 
 table {
     width: 100%;
+    min-width: 950px;
     border-collapse: collapse;
-    min-width: 800px;
 }
 
 thead {
@@ -283,7 +281,6 @@ tbody tr:hover {
     color: white;
     text-align: center;
     padding: 20px;
-    margin-top: 20px;
 }
 
 .footer p {
@@ -295,6 +292,14 @@ tbody tr:hover {
 /* =========================================
    RESPONSIVE
 ========================================= */
+
+@media (max-width: 900px) {
+
+    .search-box {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
 
 @media (max-width: 768px) {
 
@@ -323,8 +328,8 @@ tbody tr:hover {
     }
 
     .section-heading {
+        flex-direction: column;
         align-items: flex-start;
         gap: 15px;
-        flex-direction: column;
     }
 }

@@ -53,6 +53,10 @@ document
             .getElementById("city")
             .value
             .trim();
+        
+        const lastDonation = document
+            .getElementById("lastDonation")
+            .value;
 
 
         if (
@@ -80,7 +84,8 @@ document
             bloodGroup: bloodGroup,
             age: age,
             mobile: mobile,
-            city: city
+            city: city,
+            lastDonation: lastDonation
         };
 
 
@@ -183,6 +188,7 @@ function displayDonors(list = donors) {
             <td>${donor.mobile}</td>
 
             <td>${donor.city}</td>
+            <td>${donor.lastDonation || "Not Available"}</td>
 
             <td>
                 <div class="action-buttons">
@@ -302,6 +308,9 @@ function editDonor(id) {
 
     document.getElementById("city").value =
         donor.city;
+    
+    document.getElementById("lastDonation").value =
+    donor.lastDonation || "";
 
 
     editingDonorId = donor.id;

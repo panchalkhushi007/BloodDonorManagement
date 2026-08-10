@@ -1,6 +1,9 @@
 /* =========================================
-   GENERAL
+   BLOOD DONOR MANAGEMENT SYSTEM
 ========================================= */
+
+
+/* ================= RESET ================= */
 
 * {
     margin: 0;
@@ -8,323 +11,448 @@
     box-sizing: border-box;
 }
 
+
+/* ================= BODY ================= */
+
 body {
     font-family: Arial, Helvetica, sans-serif;
+
     background: #f5f7fa;
+
     color: #333;
+
     min-height: 100vh;
 }
 
+
+/* ================= CONTAINER ================= */
+
 .container {
     width: 90%;
+
     max-width: 1100px;
+
     margin: auto;
 }
 
 
-/* =========================================
-   HEADER
-========================================= */
+/* ================= HEADER ================= */
 
 .header {
     background: #9b1c31;
+
     color: white;
+
     padding: 35px 0;
+
     text-align: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.15);
 }
+
 
 .header h1 {
     font-size: 32px;
+
     margin-bottom: 10px;
 }
 
+
 .header p {
     font-size: 16px;
+
     opacity: 0.9;
 }
 
 
-/* =========================================
-   MAIN
-========================================= */
+/* ================= MAIN ================= */
 
 main {
     padding: 35px 0;
 }
 
 
-/* =========================================
-   CARD
-========================================= */
+/* ================= CARD ================= */
 
 .card {
     background: white;
+
     padding: 25px;
+
     margin-bottom: 25px;
+
     border-radius: 10px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.08);
 }
+
 
 .card h2 {
     color: #8f182d;
-    margin-bottom: 20px;
+
     font-size: 22px;
+
+    margin-bottom: 20px;
 }
 
 
-/* =========================================
-   FORM
-========================================= */
+/* ================= FORM ================= */
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
     gap: 20px;
 }
 
+
 .form-group {
     display: flex;
+
     flex-direction: column;
 }
 
+
 .form-group label {
     font-weight: bold;
+
     margin-bottom: 7px;
+
     color: #444;
 }
 
+
 .form-group input,
 .form-group select,
-.search-box input {
+.search-box input,
+.search-box select {
+
     width: 100%;
+
     padding: 12px;
+
     border: 1px solid #ccc;
+
     border-radius: 6px;
+
     font-size: 15px;
+
     outline: none;
-    transition: border-color 0.2s;
+
+    background: white;
 }
+
 
 .form-group input:focus,
 .form-group select:focus,
-.search-box input:focus {
+.search-box input:focus,
+.search-box select:focus {
+
     border-color: #9b1c31;
 }
 
 
-/* =========================================
-   BUTTONS
-========================================= */
+/* ================= BUTTONS ================= */
 
 .button-group {
-    margin-top: 25px;
+
     display: flex;
+
     gap: 12px;
+
+    margin-top: 25px;
 }
+
 
 .btn {
+
     border: none;
+
     padding: 11px 20px;
+
     border-radius: 6px;
+
     font-size: 15px;
+
     cursor: pointer;
+
     font-weight: bold;
-    transition: 0.2s;
 }
+
 
 .btn:hover {
-    transform: translateY(-1px);
+
+    opacity: 0.9;
 }
 
+
 .btn-primary {
+
     background: #9b1c31;
+
     color: white;
 }
 
-.btn-primary:hover {
-    background: #7d1426;
-}
 
 .btn-secondary {
+
     background: #e5e7eb;
+
     color: #333;
 }
 
-.btn-secondary:hover {
-    background: #d1d5db;
-}
 
 .btn-search {
+
     background: #34495e;
+
     color: white;
 }
 
-.btn-search:hover {
-    background: #263747;
-}
 
 .btn-edit {
+
     background: #f0ad4e;
+
     color: white;
+
     padding: 7px 12px;
+
     font-size: 13px;
 }
+
 
 .btn-delete {
+
     background: #dc3545;
+
     color: white;
+
     padding: 7px 12px;
+
     font-size: 13px;
 }
 
 
-/* =========================================
-   SEARCH
-========================================= */
+/* ================= SEARCH ================= */
 
 .search-box {
+
     display: grid;
-    grid-template-columns: 1fr auto auto;
+
+    grid-template-columns:
+        1fr 180px auto auto;
+
     gap: 10px;
 }
 
+
 #searchMessage {
+
     margin-top: 12px;
+
+    min-height: 20px;
+
     font-weight: bold;
 }
 
 
-/* =========================================
-   SECTION HEADING
-========================================= */
+/* ================= SECTION HEADING ================= */
 
 .section-heading {
+
     display: flex;
-    align-items: center;
+
     justify-content: space-between;
+
+    align-items: center;
+
     margin-bottom: 20px;
 }
 
+
 .section-heading h2 {
+
     margin-bottom: 5px;
 }
 
+
 .section-subtitle {
+
     color: #777;
+
     font-size: 14px;
 }
+
 
 .count-badge {
+
     background: #9b1c31;
+
     color: white;
+
     padding: 8px 14px;
+
     border-radius: 20px;
+
     font-size: 14px;
 }
 
 
-/* =========================================
-   TABLE
-========================================= */
+/* ================= TABLE ================= */
 
 .table-container {
+
     width: 100%;
+
     overflow-x: auto;
 }
 
+
 table {
+
     width: 100%;
+
+    min-width: 950px;
+
     border-collapse: collapse;
-    min-width: 800px;
 }
 
+
 thead {
+
     background: #9b1c31;
+
     color: white;
 }
 
+
 th,
 td {
+
     padding: 13px 10px;
+
     text-align: center;
+
     border-bottom: 1px solid #ddd;
 }
 
+
 tbody tr:hover {
+
     background: #fafafa;
 }
 
+
 .action-buttons {
+
     display: flex;
+
     justify-content: center;
+
     gap: 7px;
 }
 
 
-/* =========================================
-   EMPTY MESSAGE
-========================================= */
+/* ================= EMPTY ================= */
 
 .empty-message {
+
     text-align: center;
+
     padding: 25px;
+
     color: #777;
+
     font-size: 15px;
 }
 
 
-/* =========================================
-   FOOTER
-========================================= */
+/* ================= FOOTER ================= */
 
 .footer {
+
     background: #292d32;
+
     color: white;
+
     text-align: center;
+
     padding: 20px;
-    margin-top: 20px;
 }
 
+
 .footer p {
+
     margin: 5px 0;
+
     font-size: 14px;
 }
 
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .search-box {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+}
+
 
 @media (max-width: 768px) {
 
     .container {
+
         width: 94%;
     }
 
+
     .header h1 {
+
         font-size: 25px;
     }
 
+
     .form-grid {
+
         grid-template-columns: 1fr;
     }
+
 
     .search-box {
+
         grid-template-columns: 1fr;
     }
 
+
     .button-group {
+
         flex-direction: column;
     }
 
+
     .btn {
+
         width: 100%;
     }
 
+
     .section-heading {
-        align-items: flex-start;
-        gap: 15px;
+
         flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
     }
+
 }

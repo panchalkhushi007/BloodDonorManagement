@@ -1,178 +1,305 @@
-/* =========================================
-   BLOOD DONOR MANAGEMENT SYSTEM
-========================================= */
-
 let donors = [];
 let editingDonorId = null;
 
 
-/* =========================================
-   LOAD DONORS
-========================================= */
-
 document.addEventListener("DOMContentLoaded", function () {
+
     loadDonors();
+
     displayDonors();
+
+    setupEvents();
+
 });
+
+
+function setupEvents() {
+
+    document
+        .getElementById("donorForm")
+        .addEventListener("submit", saveDonor);
+
+
+    document
+        .getElementById("clearButton")
+        .addEventListener("click", resetForm);
+
+
+    document
+        .getElementById("searchButton")
+        .addEventListener("click", searchDonor);
+
+
+    document
+        .getElementById("showAllButton")
+        .addEventListener("click", showAllDonors);
+
+}
 
 
 /* =========================================
    ADD / UPDATE DONOR
 ========================================= */
 
-document
-    .getElementById("donorForm")
-    .addEventListener("submit", function (event) {
+function saveDonor(event) {
 
-        event.preventDefault();
-
-        const donorId = document
-            .getElementById("donorId")
-            .value
-            .trim();
-
-        const donorName = document
-            .getElementById("donorName")
-            .value
-            .trim();
-
-        const bloodGroup = document
-            .getElementById("bloodGroup")
-            .value;
-
-        const age = document
-            .getElementById("age")
-            .value;
-
-        const mobile = document
-            .getElementById("mobile")
-            .value
-            .trim();
-
-        const city = document
-            .getElementById("city")
-            .value
-            .trim();
-        
-        const lastDonation = document
-            .getElementById("lastDonation")
-            .value;
+    event.preventDefault();
 
 
-        if (
-            donorId === "" ||
-            donorName === "" ||
-            bloodGroup === "" ||
-            age === "" ||
-            mobile === "" ||
-            city === ""
-        ) {
-            alert("Please fill all fields.");
-            return;
+    const donorId =
+        document.getElementById("donorId").value.trim();
+
+    const donorName =
+        document.getElementById("donorName").value.trim();
+
+    const bloodGroup =
+        document.getElementById("bloodGroup").value;
+
+    const age =
+        document.getElementById("age").value;
+
+    const mobile =
+        document.getElementById("mobile").value.trim();
+
+    const city =
+        document.getElementById("city").value.trim();
+
+    const lastDonation =
+        document.getElementById("lastDonation").value;
+
+    const availability =
+        document.getElementById("availability").value;
+
+
+    if (
+        donorId === "" ||
+        donorName === "" ||
+        bloodGroup === "" ||
+        age === "" ||
+        mobile === "" ||
+        city === ""
+    ) {
+
+        alert("Please fill all required fields.");
+
+        return;
+    }
+
+
+    if (!/^[A-Za-z ]+$/.test(donorName)) {
+
+        alert(
+            "Donor name should contain only letters and spaces."
+        );
+
+        return;
+    }
+
+
+    if (!/^[A-Za-z ]+$/.test(city)) {
+
+        alert(
+            "City should contain only letters and spaces."
+        );
+
+        return;
+    }
+
+
+    if (
+        Number(age) < 18 ||
+        Number(age) > 65
+    ) {
+
+        alert(
+            "Donor age must be between 18 and 65."
+        );
+
+        return;
+    }
+
+
+    if (!/^[0-9]{10}$/.test(mobile)) {
+
+        alert(
+            "Please enter a valid 10-digit mobile number."
+        );
+
+        return;
+    }
+
+
+    const donor = {
+
+        id: donorId,
+
+        name: donorName,
+
+        bloodGroup: bloodGroup,
+
+        age: Number(age),
+
+        mobile: mobile,
+
+        city: city,
+
+        lastDonation: lastDonation,
+
+        availability: availability
+
+    };
+
+
+    /* UPDATE */
+
+    if (editingDonorId !== null) {
+
+        const index =
+            donors.findIndex(function (item) {
+
+                return String(item.id) ===
+                    String(editingDonorId);
+
+            });
+
+
+        if (index !== -1) {
+
+            donors[index] = donor;
+
         }
 
 
-        if (mobile.length !== 10 || isNaN(mobile)) {
-            alert("Please enter a valid 10-digit mobile number.");
-            return;
-        }
+        editingDonorId = null;
 
 
-        const donor = {
-            id: donorId,
-            name: donorName,
-            bloodGroup: bloodGroup,
-            age: age,
-            mobile: mobile,
-            city: city,
-            lastDonation: lastDonation
-        };
+        document.querySelector(
+            "#donorForm button[type='submit']"
+        ).textContent = "Add Donor";
 
 
-        /* Update existing donor */
-
-        if (editingDonorId !== null) {
-
-            const index = donors.findIndex(
-                donor => donor.id === editingDonorId
-            );
-
-            if (index !== -1) {
-                donors[index] = donor;
-            }
-
-            editingDonorId = null;
-
-            document.querySelector(
-                "#donorForm button[type='submit']"
-            ).textContent = "Add Donor";
-
-        }
-
-        /* Add new donor */
-
-        else {
-
-            const existingDonor = donors.find(
-                donor => donor.id === donorId
-            );
-
-            if (existingDonor) {
-                alert("Donor ID already exists.");
-                return;
-            }
-
-            donors.push(donor);
-        }
-
-
-        saveDonors();
+        saveToStorage();
 
         displayDonors();
 
         resetForm();
 
-        alert("Donor information saved successfully.");
-    });
+
+        alert(
+            "Donor information updated successfully."
+        );
+
+        return;
+    }
+
+
+    /* DUPLICATE */
+
+    const duplicate =
+        donors.some(function (item) {
+
+            return String(item.id)
+                .toLowerCase() ===
+                donorId.toLowerCase();
+
+        });
+
+
+    if (duplicate) {
+
+        alert("Donor ID already exists.");
+
+        return;
+    }
+
+
+    donors.push(donor);
+
+    saveToStorage();
+
+    displayDonors();
+
+    resetForm();
+
+
+    alert(
+        "Donor information added successfully."
+    );
+
+}
 
 
 /* =========================================
-   DISPLAY DONORS
+   DISPLAY
 ========================================= */
 
-function displayDonors(list = donors) {
+function displayDonors(list) {
+
+    if (!Array.isArray(list)) {
+
+        list = donors;
+
+    }
+
 
     const tableBody =
-        document.getElementById("donorTableBody");
+        document.getElementById(
+            "donorTableBody"
+        );
+
 
     const emptyMessage =
-        document.getElementById("emptyMessage");
+        document.getElementById(
+            "emptyMessage"
+        );
+
 
     const donorCount =
-        document.getElementById("donorCount");
+        document.getElementById(
+            "donorCount"
+        );
 
 
     tableBody.innerHTML = "";
 
 
     donorCount.textContent =
-        `${list.length} Donor${list.length !== 1 ? "s" : ""}`;
+        list.length +
+        (
+            list.length === 1
+                ? " Donor"
+                : " Donors"
+        );
 
 
     if (list.length === 0) {
 
-        emptyMessage.style.display = "block";
+        emptyMessage.style.display =
+            "block";
 
         return;
     }
 
 
-    emptyMessage.style.display = "none";
+    emptyMessage.style.display =
+        "none";
 
 
     list.forEach(function (donor) {
 
-        const row = document.createElement("tr");
+        const row =
+            document.createElement("tr");
+
+
+        const donationDate =
+            donor.lastDonation
+                ? formatDate(donor.lastDonation)
+                : "Not Available";
+
+
+        const availability =
+            donor.availability ||
+            "Available";
 
 
         row.innerHTML = `
@@ -181,45 +308,60 @@ function displayDonors(list = donors) {
 
             <td>${donor.name}</td>
 
-            <td><strong>${donor.bloodGroup}</strong></td>
+            <td>
+                <strong>
+                    ${donor.bloodGroup}
+                </strong>
+            </td>
 
             <td>${donor.age}</td>
 
             <td>${donor.mobile}</td>
 
             <td>${donor.city}</td>
-            <td>${donor.lastDonation || "Not Available"}</td>
+
+            <td>${donationDate}</td>
 
             <td>
+                <strong>
+                    ${availability}
+                </strong>
+            </td>
+
+            <td>
+
                 <div class="action-buttons">
 
                     <button
                         class="btn btn-edit"
-                        onclick="editDonor('${donor.id}')"
+                        onclick="editDonorById('${escapeJS(String(donor.id))}')"
                     >
                         Edit
                     </button>
 
                     <button
                         class="btn btn-delete"
-                        onclick="deleteDonor('${donor.id}')"
+                        onclick="deleteDonorById('${escapeJS(String(donor.id))}')"
                     >
                         Delete
                     </button>
 
                 </div>
+
             </td>
 
         `;
 
 
         tableBody.appendChild(row);
+
     });
+
 }
 
 
 /* =========================================
-   SEARCH DONOR
+   SEARCH
 ========================================= */
 
 function searchDonor() {
@@ -228,18 +370,32 @@ function searchDonor() {
         document
             .getElementById("searchId")
             .value
-            .trim();
+            .trim()
+            .toLowerCase();
+
+
+    const searchBloodGroup =
+        document
+            .getElementById("searchBloodGroup")
+            .value;
+
 
     const message =
-        document.getElementById("searchMessage");
+        document.getElementById(
+            "searchMessage"
+        );
 
 
-    if (searchId === "") {
+    if (
+        searchId === "" &&
+        searchBloodGroup === ""
+    ) {
 
         message.textContent =
-            "Please enter a Donor ID.";
+            "Please enter Donor ID or select Blood Group.";
 
-        message.style.color = "#dc3545";
+        message.style.color =
+            "#dc3545";
 
         displayDonors();
 
@@ -247,131 +403,231 @@ function searchDonor() {
     }
 
 
-    const donor =
-        donors.find(
-            donor => donor.id.toLowerCase() === searchId.toLowerCase()
-        );
+    const results =
+        donors.filter(function (donor) {
+
+            const donorId =
+                String(donor.id)
+                    .toLowerCase();
 
 
-    if (donor) {
+            const idMatch =
+                searchId === "" ||
+                donorId.includes(searchId);
 
-        displayDonors([donor]);
+
+            const bloodMatch =
+                searchBloodGroup === "" ||
+                donor.bloodGroup ===
+                searchBloodGroup;
+
+
+            return (
+                idMatch &&
+                bloodMatch
+            );
+
+        });
+
+
+    if (results.length > 0) {
+
+        displayDonors(results);
+
 
         message.textContent =
-            `Donor found: ${donor.name}`;
+            results.length +
+            " donor record(s) found.";
 
-        message.style.color = "#198754";
+
+        message.style.color =
+            "#198754";
 
     } else {
 
         displayDonors([]);
 
-        message.textContent =
-            "No donor found with this Donor ID.";
 
-        message.style.color = "#dc3545";
+        message.textContent =
+            "No matching donor records found.";
+
+
+        message.style.color =
+            "#dc3545";
+
     }
+
 }
 
 
 /* =========================================
-   EDIT DONOR
+   SHOW ALL
 ========================================= */
 
-function editDonor(id) {
+function showAllDonors() {
+
+    document.getElementById(
+        "searchId"
+    ).value = "";
+
+
+    document.getElementById(
+        "searchBloodGroup"
+    ).value = "";
+
+
+    document.getElementById(
+        "searchMessage"
+    ).textContent = "";
+
+
+    displayDonors();
+
+}
+
+
+/* =========================================
+   EDIT
+========================================= */
+
+function editDonorById(id) {
 
     const donor =
-        donors.find(
-            donor => donor.id === id
-        );
+        donors.find(function (item) {
+
+            return String(item.id) ===
+                String(id);
+
+        });
 
 
     if (!donor) {
+
         return;
     }
 
 
-    document.getElementById("donorId").value =
-        donor.id;
+    document.getElementById(
+        "donorId"
+    ).value = donor.id;
 
-    document.getElementById("donorName").value =
-        donor.name;
 
-    document.getElementById("bloodGroup").value =
+    document.getElementById(
+        "donorName"
+    ).value = donor.name;
+
+
+    document.getElementById(
+        "bloodGroup"
+    ).value =
         donor.bloodGroup;
 
-    document.getElementById("age").value =
-        donor.age;
 
-    document.getElementById("mobile").value =
-        donor.mobile;
-
-    document.getElementById("city").value =
-        donor.city;
-    
-    document.getElementById("lastDonation").value =
-    donor.lastDonation || "";
+    document.getElementById(
+        "age"
+    ).value = donor.age;
 
 
-    editingDonorId = donor.id;
+    document.getElementById(
+        "mobile"
+    ).value = donor.mobile;
+
+
+    document.getElementById(
+        "city"
+    ).value = donor.city;
+
+
+    document.getElementById(
+        "lastDonation"
+    ).value =
+        donor.lastDonation || "";
+
+
+    document.getElementById(
+        "availability"
+    ).value =
+        donor.availability ||
+        "Available";
+
+
+    editingDonorId =
+        donor.id;
 
 
     document.querySelector(
         "#donorForm button[type='submit']"
-    ).textContent = "Update Donor";
+    ).textContent =
+        "Update Donor";
 
 
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
+
 }
 
 
 /* =========================================
-   DELETE DONOR
+   DELETE
 ========================================= */
 
-function deleteDonor(id) {
+function deleteDonorById(id) {
 
     const donor =
-        donors.find(
-            donor => donor.id === id
-        );
+        donors.find(function (item) {
+
+            return String(item.id) ===
+                String(id);
+
+        });
 
 
     if (!donor) {
+
         return;
     }
 
 
-    const confirmation =
-        confirm(
-            `Are you sure you want to delete ${donor.name}'s record?`
-        );
+    if (
+        !confirm(
+            "Are you sure you want to delete " +
+            donor.name +
+            "'s record?"
+        )
+    ) {
 
-
-    if (!confirmation) {
         return;
     }
 
 
     donors =
-        donors.filter(
-            donor => donor.id !== id
-        );
+        donors.filter(function (item) {
+
+            return String(item.id) !==
+                String(id);
+
+        });
 
 
-    saveDonors();
+    saveToStorage();
 
     displayDonors();
 
-    alert("Donor record deleted successfully.");
+
+    alert(
+        "Donor record deleted successfully."
+    );
+
 }
 
 
 /* =========================================
-   RESET FORM
+   RESET
 ========================================= */
 
 function resetForm() {
@@ -380,37 +636,125 @@ function resetForm() {
         .getElementById("donorForm")
         .reset();
 
+
     editingDonorId = null;
 
 
     document.querySelector(
         "#donorForm button[type='submit']"
-    ).textContent = "Add Donor";
+    ).textContent =
+        "Add Donor";
+
 }
 
 
 /* =========================================
-   LOCAL STORAGE
+   STORAGE
 ========================================= */
 
-function saveDonors() {
+function saveToStorage() {
 
     localStorage.setItem(
         "bloodDonors",
         JSON.stringify(donors)
     );
+
 }
 
 
 function loadDonors() {
 
-    const storedDonors =
-        localStorage.getItem("bloodDonors");
+    const savedData =
+        localStorage.getItem(
+            "bloodDonors"
+        );
 
 
-    if (storedDonors) {
+    if (!savedData) {
+
+        donors = [];
+
+        return;
+    }
+
+
+    try {
 
         donors =
-            JSON.parse(storedDonors);
+            JSON.parse(savedData);
+
+
+        if (!Array.isArray(donors)) {
+
+            donors = [];
+
+        }
+
+    } catch (error) {
+
+        donors = [];
+
     }
+
+}
+
+
+/* =========================================
+   DATE
+========================================= */
+
+function formatDate(value) {
+
+    if (!value) {
+
+        return "Not Available";
+
+    }
+
+
+    const date =
+        new Date(
+            value + "T00:00:00"
+        );
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return value;
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================
+   SAFETY
+========================================= */
+
+function escapeJS(value) {
+
+    return String(value)
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
 }
